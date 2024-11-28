@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './pantalla_login.dart';
+import './pantalla_registro.dart';
 
 class PantallaBienvenida extends StatelessWidget {
   const PantallaBienvenida({Key? key}) : super(key: key);
@@ -8,15 +10,13 @@ class PantallaBienvenida extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          // Fondo con imagen decorativa
           Expanded(
             flex: 2,
             child: Container(
               decoration: const BoxDecoration(
                 color: Colors.white,
                 image: DecorationImage(
-                  image: AssetImage(
-                      'assets/fondo_bienvenida.jpg'), // Cambia a tu imagen
+                  image: AssetImage('assets/fondo_bienvenida.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -26,7 +26,7 @@ class PantallaBienvenida extends StatelessWidget {
                   children: [
                     const SizedBox(height: 50),
                     Image.asset(
-                      'assets/icono.png', // Icono central (reemplázalo con tu archivo)
+                      'assets/icono.png',
                       width: 100,
                       height: 100,
                     ),
@@ -55,7 +55,12 @@ class PantallaBienvenida extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Lógica para el botón de Entrar
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PantallaLogin(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       // primary: Colors.grey[300],
@@ -70,7 +75,12 @@ class PantallaBienvenida extends StatelessWidget {
                   const SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
-                      // Navegar a la pantalla de registro
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PantallaRegistro(),
+                        ),
+                      );
                     },
                     child: const Text.rich(
                       TextSpan(
