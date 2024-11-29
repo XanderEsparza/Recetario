@@ -1,8 +1,54 @@
 import 'package:flutter/material.dart';
 import './pantalla_login.dart';
+import 'package:provider/provider.dart';
+import '../models/usuario.dart';
+import '../provider/usuario_provider.dart';
 
-class PantallaRegistro extends StatelessWidget {
-  const PantallaRegistro({Key? key}) : super(key: key);
+class PantallaRegistro extends StatefulWidget {
+  @override
+  _PantallaRegistroState createState() => _PantallaRegistroState();
+}
+
+class _PantallaRegistroState extends State<PantallaRegistro> {
+  final _formKey = GlobalKey<FormState>();
+  final _nombreController = TextEditingController();
+  final _apellidosController = TextEditingController();
+  final _usuarioController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nombreController.dispose();
+    _apellidosController.dispose();
+    _usuarioController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _registrarUsuario() {
+    final usuarioProvider =
+        Provider.of<UsuarioProvider>(context, listen: false);
+    if (_formKey.currentState!.validate()) {
+      final nuevoUsuario = Usuario(
+        nombre: _nombreController.text,
+        apellidos: _apellidosController.text,
+        usuario: _usuarioController.text,
+        password: _passwordController.text,
+      );
+      usuarioProvider.agregarUsuario(nuevoUsuario);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Usuario registrado correctamente')),
+      );
+
+      _nombreController.clear();
+      _apellidosController.clear();
+      _usuarioController.clear();
+      _passwordController.clear();
+
+      Navigator.pushNamed(context, '/login');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,76 +96,111 @@ class PantallaRegistro extends StatelessWidget {
             // Formulario
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Nombre(s):',
-                      border: UnderlineInputBorder(),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _nombreController,
+                      decoration: const InputDecoration(
+                        labelText: 'Nombre(s):',
+                        border: UnderlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingresa tu nombre';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Apellidos:',
-                      border: UnderlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _apellidosController,
+                      decoration: const InputDecoration(
+                        labelText: 'Apellidos:',
+                        border: UnderlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingresa tus apellidos';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Usuario:',
-                      border: UnderlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _usuarioController,
+                      decoration: const InputDecoration(
+                        labelText: 'Usuario:',
+                        border: UnderlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingresa un nombre de usuario';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Contraseña:',
-                      border: UnderlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: const InputDecoration(
+                        labelText: 'Contraseña:',
+                        border: UnderlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingresa una contraseña';
+                        }
+                        if (value.length < 6) {
+                          return 'La contraseña debe tener al menos 6 caracteres';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15, horizontal: 50),
-                    ),
-                    child: const Text(
-                      'Registrarse',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 14, 13, 13), fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PantallaLogin(),
-                        ),
-                      );
-                    },
-                    child: const Text.rich(
-                      TextSpan(
-                        text: 'Ya tienes una cuenta? ',
-                        style: TextStyle(color: Colors.black),
-                        children: [
-                          TextSpan(
-                            text: 'Inicia sesión',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ],
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: _registrarUsuario,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 50),
+                      ),
+                      child: const Text(
+                        'Registrarse',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 14, 13, 13),
+                            fontSize: 16),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PantallaLogin(),
+                          ),
+                        );
+                      },
+                      child: const Text.rich(
+                        TextSpan(
+                          text: '¿Ya tienes una cuenta? ',
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: 'Inicia sesión',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

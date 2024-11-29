@@ -91,7 +91,7 @@ class PantallaLogin extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const PantallaRegistro(),
+                          builder: (context) => PantallaRegistro(),
                         ),
                       );
                     },
