@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/receta.dart';
+import '../provider/receta_provider.dart';
+import 'dart:io';
 
-class PantallaRecetas extends StatelessWidget {
-  const PantallaRecetas({Key? key}) : super(key: key);
+class PantallaRecetas extends StatefulWidget {
+  @override
+  _PantallaRecetasState createState() => _PantallaRecetasState();
+}
 
+class _PantallaRecetasState extends State<PantallaRecetas> {
   @override
   Widget build(BuildContext context) {
+    final recetaProvider = Provider.of<RecetaProvider>(context);
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,8 +61,9 @@ class PantallaRecetas extends StatelessWidget {
                 mainAxisSpacing: 10,
                 childAspectRatio: 0.75,
               ),
-              itemCount: 6,
+              itemCount: recetaProvider.recetas.length,
               itemBuilder: (context, index) {
+                final receta = recetaProvider.recetas[index];
                 return Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -68,28 +77,28 @@ class PantallaRecetas extends StatelessWidget {
                         borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(12),
                         ),
-                        child: Image.asset(
-                          'assets/comida.jpg',
+                        child: Image.file(
+                          File(receta.imagen),
                           height: 100,
                           width: double.infinity,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'Nombre',
+                          receta.nombre,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
                         child: Text(
-                          'Descripción de la receta',
-                          maxLines: 2,
+                          receta.descripcion,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),

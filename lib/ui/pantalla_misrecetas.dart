@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import '../ui/pantalla_agregar_receta.dart';
+import 'package:provider/provider.dart';
+import '../models/receta.dart';
+import '../provider/receta_provider.dart';
+import '../provider/usuario_provider.dart';
+import 'dart:io';
 
-class PantallaMisRecetas extends StatelessWidget {
+class PantallaMisRecetas extends StatefulWidget {
+  @override
+  _PantallaMisRecetasState createState() => _PantallaMisRecetasState();
+}
+
+class _PantallaMisRecetasState extends State<PantallaMisRecetas> {
   @override
   Widget build(BuildContext context) {
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
+    final currentUser = usuarioProvider.currentUser;
+    final recetaProvider = Provider.of<RecetaProvider>(context);
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(
@@ -40,72 +54,82 @@ class PantallaMisRecetas extends StatelessWidget {
                 mainAxisSpacing: 16.0,
                 childAspectRatio: 3 / 4,
               ),
-              itemCount: 4, // Cambiar según el número de recetas
+              itemCount: recetaProvider
+                  .recetas.length, // Cambiar según el número de recetas
               itemBuilder: (context, index) {
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Imagen de la receta
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12),
-                        ),
-                        child: Image.asset(
-                          'assets/comida.jpg',
-                          height: 100,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Nombre',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                final receta = recetaProvider.recetas[index];
+                if (receta.id_usuario == currentUser?.id) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Imagen de la receta
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          child: Image.file(
+                            File(receta.imagen),
+                            height: 100,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          'Descripción de la receta',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Acción al presionar el botón "Ver"
-                          },
-                          style: ElevatedButton.styleFrom(),
-                          child: const Text(
-                            'Ver',
-                            style: TextStyle(color: Colors.black),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            receta.nombre,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            receta.descripcion,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Acción al presionar el botón "Ver"
+                            },
+                            style: ElevatedButton.styleFrom(),
+                            child: const Text(
+                              'Ver',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        // backgroundColor: Colors.green,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateRecipeScreen(),
+            ),
+          );
+        },
         child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -16,17 +16,19 @@ class _PantallaLoginState extends State<PantallaLogin> {
   final _passwordController = TextEditingController();
 
   void _iniciarSesion() {
-    final usuarioProvider =
-        Provider.of<UsuarioProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       final usuario = _usuarioController.text;
       final password = _passwordController.text;
+
+      // Use Provider.of with listen: false to avoid rebuilds
+      final usuarioProvider =
+          Provider.of<UsuarioProvider>(context, listen: false);
 
       if (usuarioProvider.validarUsuario(usuario, password)) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Inicio de sesión exitoso')),
         );
-        Navigator.pushNamed(context, '/recetas');
+        Navigator.pushReplacementNamed(context, '/recetas');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Usuario o contraseña incorrectos')),

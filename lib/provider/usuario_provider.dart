@@ -9,6 +9,10 @@ class UsuarioProvider with ChangeNotifier {
 
   List<Usuario> get usuarios => _usuarios;
 
+  Usuario? _currentUser;
+
+  Usuario? get currentUser => _currentUser;
+
   Future<void> obtenerUsuarios() async {
     _usuarios = await _usuarioRepositorio.obtenerUsuarios();
     notifyListeners();
@@ -35,8 +39,16 @@ class UsuarioProvider with ChangeNotifier {
 
   bool validarUsuario(String usuario, String password) {
     final hashedPassword = encriptarPassword(password);
-    return _usuarios
-        .any((u) => u.usuario == usuario && u.password == hashedPassword);
+    final userIndex = _usuarios.indexWhere(
+      (u) => u.usuario == usuario && u.password == hashedPassword,
+    );
+
+    if (userIndex != -1) {
+      _currentUser = _usuarios[userIndex];
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 
   void listarUsuarios() {
