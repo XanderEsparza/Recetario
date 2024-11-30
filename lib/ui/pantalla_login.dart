@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:recetario/ui/pantalla_registro.dart';
+import 'package:provider/provider.dart';
+import '../provider/usuario_provider.dart';
 
-class PantallaLogin extends StatelessWidget {
+class PantallaLogin extends StatefulWidget {
   const PantallaLogin({Key? key}) : super(key: key);
+
+  @override
+  _PantallaLoginState createState() => _PantallaLoginState();
+}
+
+class _PantallaLoginState extends State<PantallaLogin> {
+  final _formKey = GlobalKey<FormState>();
+  final _usuarioController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void _iniciarSesion() {
+    final usuarioProvider =
+        Provider.of<UsuarioProvider>(context, listen: false);
+    if (_formKey.currentState!.validate()) {
+      final usuario = _usuarioController.text;
+      final password = _passwordController.text;
+
+      if (usuarioProvider.validarUsuario(usuario, password)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Inicio de sesión exitoso')),
+        );
+        Navigator.pushNamed(context, '/recetas');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Usuario o contraseña incorrectos')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,73 +76,66 @@ class PantallaLogin extends StatelessWidget {
             // Formulario
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  // Campo de Usuario
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person),
-                      labelText: 'Usuario',
-                      border: UnderlineInputBorder(),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: _usuarioController,
+                      decoration: const InputDecoration(labelText: 'Usuario'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingresa tu usuario';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Campo de Contraseña
-                  TextFormField(
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      labelText: 'Contraseña',
-                      border: UnderlineInputBorder(),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration:
+                          const InputDecoration(labelText: 'Contraseña'),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingresa tu contraseña';
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 30),
-
-                  // Botón de Acceder
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/recetas');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      // primary: Colors.grey[300],
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 15, horizontal: 50),
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: _iniciarSesion,
+                      child: const Text('Iniciar sesión'),
                     ),
-                    child: const Text(
-                      'Acceder',
-                      style: TextStyle(color: Colors.black, fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Enlace a la pantalla de Registro
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PantallaRegistro(),
-                        ),
-                      );
-                    },
-                    child: const Text.rich(
-                      TextSpan(
-                        text: '¿Aún no tienes cuenta? ',
-                        style: TextStyle(color: Colors.black),
-                        children: [
-                          TextSpan(
-                            text: 'Registrarse',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PantallaRegistro(),
                           ),
-                        ],
+                        );
+                      },
+                      child: const Text.rich(
+                        TextSpan(
+                          text: '¿Aun no tinees una cuenta? ',
+                          style: TextStyle(color: Colors.black),
+                          children: [
+                            TextSpan(
+                              text: 'Crea una',
+                              style: TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

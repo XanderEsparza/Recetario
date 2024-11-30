@@ -1,6 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/usuario.dart';
+import '../models/receta.dart';
 
 class AyudanteBaseDatos {
   static final AyudanteBaseDatos _instancia = AyudanteBaseDatos._interno();
@@ -87,6 +88,37 @@ class AyudanteBaseDatos {
     final db = await baseDatos;
     return await db.delete(
       'usuarios',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  //RECETAS
+  Future<int> agregarReceta(Receta receta) async {
+    final db = await baseDatos;
+    return await db.insert('recetas', receta.toMap());
+  }
+
+  Future<List<Receta>> obtenerRecetas() async {
+    final db = await baseDatos;
+    final List<Map<String, dynamic>> mapas = await db.query('recetas');
+    return List.generate(mapas.length, (i) => Receta.fromMap(mapas[i]));
+  }
+
+  Future<int> actualizarReceta(Receta receta) async {
+    final db = await baseDatos;
+    return await db.update(
+      'recetas',
+      receta.toMap(),
+      where: 'id = ?',
+      whereArgs: [receta.id],
+    );
+  }
+
+  Future<int> eliminarReceta(int id) async {
+    final db = await baseDatos;
+    return await db.delete(
+      'recetas',
       where: 'id = ?',
       whereArgs: [id],
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import './pantalla_login.dart';
 import 'package:provider/provider.dart';
-import '../models/usuario.dart';
 import '../provider/usuario_provider.dart';
+import '../models/usuario.dart';
 
 class PantallaRegistro extends StatefulWidget {
   @override
@@ -38,7 +38,7 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
       usuarioProvider.agregarUsuario(nuevoUsuario);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuario registrado correctamente')),
+        SnackBar(content: Text('Usuario registrado correctamente: ')),
       );
 
       _nombreController.clear();
