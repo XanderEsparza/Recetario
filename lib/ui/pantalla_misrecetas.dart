@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../ui/pantalla_agregar_receta.dart';
+import '../ui/pantalla_detalle.dart';
 import 'package:provider/provider.dart';
 import '../models/receta.dart';
 import '../provider/receta_provider.dart';
@@ -103,7 +104,13 @@ class _PantallaMisRecetasState extends State<PantallaMisRecetas> {
                           padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              // Acción al presionar el botón "Ver"
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PantallaDetalle(receta: receta),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(),
                             child: const Text(
