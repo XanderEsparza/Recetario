@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:recetario/ui/pantalla_actualizar_perfil.dart';
 import 'dart:io';
 import '../provider/usuario_provider.dart';
 import '../provider/receta_provider.dart';
@@ -48,9 +49,14 @@ class PantallaPerfil extends StatelessWidget {
                             color: Colors.black54,
                           ),
                           onPressed: () {
-                            // Acción al presionar el botón de editar
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PantallaActualizarPerfil(),
+                              ),
+                            );
                             print('Editar perfil');
-                            // Aquí podrías abrir un diálogo o redirigir a otra pantalla
                           },
                           tooltip: 'Editar perfil',
                         ),

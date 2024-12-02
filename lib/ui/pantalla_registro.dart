@@ -10,6 +10,12 @@ class PantallaRegistro extends StatefulWidget {
 }
 
 class _PantallaRegistroState extends State<PantallaRegistro> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<UsuarioProvider>(context, listen: false).obtenerUsuarios();
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
@@ -25,7 +31,7 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
     super.dispose();
   }
 
-  void _registrarUsuario() {
+  void _registrarUsuario() async {
     final usuarioProvider =
         Provider.of<UsuarioProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
@@ -35,18 +41,25 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
         usuario: _usuarioController.text,
         password: _passwordController.text,
       );
-      usuarioProvider.agregarUsuario(nuevoUsuario);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuario registrado correctamente: ')),
-      );
+      bool registroExitoso = await usuarioProvider.agregarUsuario(nuevoUsuario);
 
-      _nombreController.clear();
-      _apellidosController.clear();
-      _usuarioController.clear();
-      _passwordController.clear();
+      if (registroExitoso) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuario registrado correctamente')),
+        );
 
-      Navigator.pushNamed(context, '/login');
+        _nombreController.clear();
+        _apellidosController.clear();
+        _usuarioController.clear();
+        _passwordController.clear();
+
+        Navigator.pushNamed(context, '/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('El nombre de usuario ya está en uso')),
+        );
+      }
     }
   }
 

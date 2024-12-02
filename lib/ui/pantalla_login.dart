@@ -11,6 +11,12 @@ class PantallaLogin extends StatefulWidget {
 }
 
 class _PantallaLoginState extends State<PantallaLogin> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<UsuarioProvider>(context, listen: false).obtenerUsuarios();
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _usuarioController = TextEditingController();
   final _passwordController = TextEditingController();

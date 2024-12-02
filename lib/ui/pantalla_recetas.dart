@@ -12,6 +12,12 @@ class PantallaRecetas extends StatefulWidget {
 
 class _PantallaRecetasState extends State<PantallaRecetas> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<RecetaProvider>(context, listen: false).obtenerRecetas();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final recetaProvider = Provider.of<RecetaProvider>(context);
     return Scaffold(

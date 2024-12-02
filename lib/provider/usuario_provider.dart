@@ -18,17 +18,21 @@ class UsuarioProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> agregarUsuario(Usuario usuario) async {
-    usuario.password = encriptarPassword(usuario.password);
-    await _usuarioRepositorio.agregarUsuario(usuario);
-    print(
-        'usuario agregado:  ${usuario.usuario}, Password: ${usuario.password}');
-    listarUsuarios();
+  Future<bool> agregarUsuario(Usuario nuevoUsuario) async {
+    if (_usuarios.any((usuario) => usuario.usuario == nuevoUsuario.usuario)) {
+      return false; // Retornamos false si el usuario ya existe
+    }
+    nuevoUsuario.password = encriptarPassword(nuevoUsuario.password);
+    await _usuarioRepositorio.agregarUsuario(nuevoUsuario);
     await obtenerUsuarios();
+    notifyListeners(); // Notificamos a los listeners sobre el cambio
+    return true; // Retornamos true si el usuario se agregó correctamente
   }
 
   Future<void> actualizarUsuario(Usuario usuario) async {
     await _usuarioRepositorio.actualizarUsuario(usuario);
+    _currentUser = usuario;
+    notifyListeners();
     await obtenerUsuarios();
   }
 
