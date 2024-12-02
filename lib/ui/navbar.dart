@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:recetario/ui/pantalla_perfil.dart';
 import './pantalla_misrecetas.dart';
 import './pantalla_recetas.dart';
 
@@ -11,10 +12,7 @@ class NavBar extends StatelessWidget {
 
     // Pantallas para cada pestaña
     List<Widget> _buildScreens() {
-      return [
-        PantallaRecetas(),
-        PantallaMisRecetas(),
-      ];
+      return [PantallaRecetas(), PantallaMisRecetas(), PantallaPerfil()];
     }
 
     // Íconos y etiquetas del Navbar
@@ -28,16 +26,16 @@ class NavBar extends StatelessWidget {
         ),
         PersistentBottomNavBarItem(
           icon: Icon(Icons.book),
-          title: "Biblioteca",
+          title: "Mis Recetas",
           activeColorPrimary: Colors.teal,
           inactiveColorPrimary: Colors.grey,
         ),
-        // PersistentBottomNavBarItem(
-        //   icon: Icon(Icons.person),
-        //   title: "Perfil",
-        //   activeColorPrimary: Colors.teal,
-        //   inactiveColorPrimary: Colors.grey,
-        // ),
+        PersistentBottomNavBarItem(
+          icon: Icon(Icons.person),
+          title: "Perfil",
+          activeColorPrimary: Colors.teal,
+          inactiveColorPrimary: Colors.grey,
+        ),
       ];
     }
 
@@ -46,7 +44,7 @@ class NavBar extends StatelessWidget {
       controller: _controller,
       screens: _buildScreens(),
       items: _navBarsItems(),
-      navBarStyle: NavBarStyle.style3, // Estilo del Navbar
+      navBarStyle: NavBarStyle.style3,
     );
   }
 }

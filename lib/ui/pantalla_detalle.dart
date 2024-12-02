@@ -125,10 +125,8 @@ class PantallaDetalle extends StatelessWidget {
                       label: 'Ver receta',
                       onPressed: () async {
                         try {
-                          // Abrir el documento almacenado en la receta
                           await OpenFilex.open(receta.documento);
                         } catch (e) {
-                          // Manejo de errores
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content:
