@@ -95,6 +95,7 @@ class _PantallaRecetasState extends State<PantallaRecetas> {
                         padding: EdgeInsets.all(8.0),
                         child: Text(
                           receta.nombre,
+                          maxLines: 1,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

@@ -71,13 +71,6 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
           children: [
             // Encabezado con imagen y título
             Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                  image: AssetImage('assets/fondo_bienvenida.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ),
               child: Column(
                 children: [
                   const SizedBox(height: 50),

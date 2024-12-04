@@ -60,4 +60,22 @@ class UsuarioProvider with ChangeNotifier {
       print('Usuario: ${u.usuario}, Password: ${u.password}');
     }
   }
+
+  void logout() {
+    _currentUser = null;
+    notifyListeners();
+  }
+
+  String getNombreUsuario(int idUsuario) {
+    final usuario = usuarios.firstWhere(
+      (u) => u.id == idUsuario,
+      orElse: () => Usuario(
+          id: idUsuario,
+          nombre: 'Desconocido',
+          apellidos: 'Desconocido',
+          usuario: 'Desconocido',
+          password: 'Desconocido'),
+    );
+    return usuario.usuario;
+  }
 }

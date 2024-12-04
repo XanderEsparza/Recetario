@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import './pantalla_login.dart';
 import './pantalla_registro.dart';
+import 'package:provider/provider.dart';
+import '../provider/usuario_provider.dart';
 
 class PantallaBienvenida extends StatelessWidget {
   const PantallaBienvenida({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
+    final currentUser = usuarioProvider.currentUser;
+
     return Scaffold(
       body: Column(
         children: [
@@ -16,9 +21,9 @@ class PantallaBienvenida extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: Colors.white,
                 image: DecorationImage(
-                  image: AssetImage('assets/fondo_bienvenida.jpg'),
-                  fit: BoxFit.cover,
-                ),
+                    image: AssetImage('assets/fondo_bienvenida.jpg'),
+                    fit: BoxFit.cover,
+                    opacity: 0.4),
               ),
               child: Center(
                 child: Column(
@@ -27,15 +32,15 @@ class PantallaBienvenida extends StatelessWidget {
                     const SizedBox(height: 50),
                     Image.asset(
                       'assets/icono.png',
-                      width: 100,
-                      height: 100,
+                      width: 200,
+                      height: 200,
                     ),
                     const SizedBox(height: 10),
                     const Text(
                       'Bienvenido',
                       style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 64,
+                        fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
                     ),
@@ -55,6 +60,7 @@ class PantallaBienvenida extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      if (currentUser?.id != null) {}
                       Navigator.push(
                         context,
                         MaterialPageRoute(

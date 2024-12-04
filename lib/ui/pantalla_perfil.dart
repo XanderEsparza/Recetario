@@ -4,6 +4,7 @@ import 'package:recetario/ui/pantalla_actualizar_perfil.dart';
 import 'dart:io';
 import '../provider/usuario_provider.dart';
 import '../provider/receta_provider.dart';
+import '../ui/pantalla_login.dart';
 
 class PantallaPerfil extends StatelessWidget {
   @override
@@ -18,12 +19,29 @@ class PantallaPerfil extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: const Text('Perfil'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Cerrar sesión',
+            onPressed: () {
+              usuarioProvider.logout();
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const PantallaLogin(),
+                ),
+                (route) => false, // Esto elimina todas las rutas anteriores
+              );
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             // Parte superior (perfil)
             Container(
-              // color: Colors.grey[300],
               padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
               child: Column(
                 children: [
@@ -80,23 +98,6 @@ class PantallaPerfil extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Acción para ver recetas favoritas
-                    },
-                    icon: Icon(
-                      Icons.star,
-                      color: Colors.yellow[700],
-                    ),
-                    label: Text('Recetas favoritas'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.grey[300],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

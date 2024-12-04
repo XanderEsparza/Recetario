@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../models/usuario.dart';
 import '../models/receta.dart';
+import '../models/comentario.dart';
 
 class AyudanteBaseDatos {
   static final AyudanteBaseDatos _instancia = AyudanteBaseDatos._interno();
@@ -119,6 +120,37 @@ class AyudanteBaseDatos {
     final db = await baseDatos;
     return await db.delete(
       'recetas',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  //Comentarios
+  Future<int> agregarComentario(Comentario comentario) async {
+    final db = await baseDatos;
+    return await db.insert('comentarios', comentario.toMap());
+  }
+
+  Future<List<Comentario>> obtenerComentarios() async {
+    final db = await baseDatos;
+    final List<Map<String, dynamic>> mapas = await db.query('comentarios');
+    return List.generate(mapas.length, (i) => Comentario.fromMap(mapas[i]));
+  }
+
+  Future<int> actualizarComentario(Comentario comentario) async {
+    final db = await baseDatos;
+    return await db.update(
+      'comentarios',
+      comentario.toMap(),
+      where: 'id = ?',
+      whereArgs: [comentario.id],
+    );
+  }
+
+  Future<int> eliminarComentario(int id) async {
+    final db = await baseDatos;
+    return await db.delete(
+      'comentarios',
       where: 'id = ?',
       whereArgs: [id],
     );

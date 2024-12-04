@@ -85,6 +85,7 @@ class _PantallaMisRecetasState extends State<PantallaMisRecetas> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           receta.nombre,
+                          maxLines: 1,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -183,7 +184,7 @@ class _PantallaMisRecetasState extends State<PantallaMisRecetas> {
             ),
           );
         },
-        child: const Icon(Icons.add, color: Colors.white, size: 30),
+        child: const Icon(Icons.add, color: Colors.green, size: 30),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );

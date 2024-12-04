@@ -8,6 +8,22 @@ class RecetaProvider with ChangeNotifier {
 
   List<Receta> get recetas => _recetas;
 
+  List<Receta> _recetasFiltradas = [];
+
+  List<Receta> get recetasFiltradas => _recetasFiltradas;
+
+  void buscarRecetas(String query) {
+    if (query.isEmpty) {
+      _recetasFiltradas = [];
+    } else {
+      _recetasFiltradas = _recetas
+          .where((receta) =>
+              receta.nombre.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
+  }
+
   Future<void> obtenerRecetas() async {
     _recetas = await _recetaRepositorio.obtenerRecetas();
     notifyListeners();

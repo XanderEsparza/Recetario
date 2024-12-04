@@ -115,6 +115,9 @@ class _CreateRecipeScreenState extends State<CreateRecipeScreen> {
                             if (int.tryParse(value) == null) {
                               return 'Por favor ingrese un número válido';
                             }
+                            if (value.length > 3) {
+                              return 'Por favor ingrese un número más pequeño';
+                            }
                             return null;
                           },
                         ),
